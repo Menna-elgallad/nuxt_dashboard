@@ -1,47 +1,45 @@
-<template lang="pug">
-.container
-    chart(type="bar" :data="basicData")
+<template >
+<div style="width:100vw" >
+  
+  <!-- <chart type="bar" :data="basicData"/> -->
+  
+
+</div>
 
 </template>
   
-  <script setup lang="ts">
-const { data } = await useAsyncGql({
-  operation: "MyQuery"
-});
-console.log("myquery", data);
-import { ref } from "vue";
-import { useToast } from "primevue/usetoast";
+<script setup lang="ts">
+const route = useRouter()
+ onMounted(async function check(){
 
-const text = ref();
-const toast = useToast();
-const greet = () => {
-  toast.add({ severity: "info", summary: "Hello " + text.value });
-};
+  const tokenlocal= usetoken()
+  console.log( "local" , window.localStorage.getItem("token") )
+  const token = tokenlocal.value|| window.localStorage.getItem("token") 
+  console.log("token :", token)
+  useGqlToken(token)
+  const { data } =  await useAsyncGql({
+      operation: "check"
+  });
+  const check = data.value?.me.message
+  console.log(check)
+  if (check ==="Operation done successfully"  ){
+    if (window.localStorage.getItem("save") === "false"){
+        window.localStorage.removeItem("token")
+      }
+    return
+  }
+  else if (!token){
+    route.push("login")
+    
+  } 
 
-const basicData = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "My First dataset",
-      backgroundColor: "#42A5F5",
-      data: [65, 59, 80, 81, 56, 55, 40]
-    },
-    {
-      label: "My Second dataset",
-      backgroundColor: "#9CCC65",
-      data: [28, 48, 40, 19, 86, 27, 90]
-    }
-  ]
-};
+})
+
+
+
 </script>
   
 <style lang="scss">
-.container {
-  margin: 0 auto;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 </style>
   
