@@ -116,13 +116,16 @@ import { FilterMatchMode, FilterOperator } from "primevue/api";
 export default {
     setup() {
         onMounted(() => {
-            customerService.value.getCustomersLarge().then((data) => {
+
+            customerService.value.getCustomersSmall().then((data) => {
                 customers.value = data;
+               
                 customers.value.forEach(
                     (customer) => (customer.date = new Date(customer.date))
                 );
                 loading.value = false;
             });
+           
         });
         const customers = ref();
         const selectedCustomers = ref();
