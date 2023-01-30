@@ -110,22 +110,19 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import CustomerService from "@/service/CustomerService";
+import CustomerService from "@/services/CustomerService";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 
 export default {
     setup() {
         onMounted(() => {
-
-            customerService.value.getCustomersSmall().then((data) => {
+            customerService.value.getCustomersLarge().then((data) => {
                 customers.value = data;
-               
                 customers.value.forEach(
                     (customer) => (customer.date = new Date(customer.date))
                 );
                 loading.value = false;
             });
-           
         });
         const customers = ref();
         const selectedCustomers = ref();
