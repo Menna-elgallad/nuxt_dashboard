@@ -1,17 +1,17 @@
 
 <template>
-    <div>
-        <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="10"
+    <div v-if="customers">
+        <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="5" 
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" v-model:filters="filters" filterDisplay="menu" :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-            :globalFilterFields="['name','country.name','representative.name','status']" responsiveLayout="scroll">
+            :globalFilterFields="['user.enFullName','user.email', 'user.age' , 'user.phone' , 'user.gender']" responsiveLayout="scroll">
             <template #header>
                 <div class="flex justify-content-center align-items-center">
-                    <h5 class="m-0">Customers</h5>
+                    <h5 class="px-2">Users </h5>
                     <span class="p-input-icon-left">
                         <i class="pi pi-search" />
-                        <InputText v-model="filters['global'].value" placeholder="Keyword Search" />
+                        <InputText v-model="filters['global'].value" placeholder="Search in users" />
                     </span>
                 </div>
             </template>
@@ -22,24 +22,53 @@
                 Loading customers data. Please wait.
             </template>
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="name" header="Name" sortable style="min-width: 14rem">
+            <Column field="user.enFullName" header="Name" sortable style="min-width: 14rem">
                 <template #body="{data}">
-                    {{data.name}}
+                    <img :src =" 'https://staging-api.tatmeen.sa/' +data.user.profilePicture" width="30" style="vertical-align: middle" />
+                 
+                    {{data.user.enFullName}}
+                </template>
+                <!-- <template #filter="{filterModel}">
+                    <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>
+                </template> -->
+            </Column>
+            <Column field="user.email" header="Email" sortable filterMatchMode="contains" style="min-width: 14rem">
+                <template #body="{data}">
+                    
+                    <span class="image-text">{{data.user.email}}</span>
+                </template>
+                <!-- <template #filter="{filterModel}">
+                    <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by country"/>
+                </template> -->
+            </Column>
+            <!-- <Column field="user.age" header="Age" sortable style="min-width: 14rem">
+                <template #body="{data}">
+                    {{data.user.age}}
                 </template>
                 <template #filter="{filterModel}">
                     <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>
                 </template>
-            </Column>
-            <Column field="country.name" header="Country" sortable filterMatchMode="contains" style="min-width: 14rem">
+            </Column> -->
+            <Column field="user.phone" header="Phone" sortable style="min-width: 14rem">
                 <template #body="{data}">
-                    <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" width="30" style="vertical-align: middle" />
-                    <span class="image-text">{{data.country.name}}</span>
+                    {{data.user.phone}}
                 </template>
-                <template #filter="{filterModel}">
-                    <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by country"/>
-                </template>
+         
             </Column>
-            <Column header="Agent" sortable filterField="representative" sortField="representative.name" :showFilterMatchModes="false" :filterMenuStyle="{'width':'14rem'}" style="min-width: 14rem">
+            <Column field="user.genders" header="Gender" style="min-width: 14rem">
+                <template #body="{data}">
+                    {{data.user.gender}}
+                </template>
+                
+            </Column>
+            <Column  style="min-width: 14rem">
+                <template #body>
+                    <Button type="button" class="mybutton mr-2">Accept</Button>
+                    <Button type="button" class="mybutton2">Regect</Button>
+
+                </template>
+            </Column> 
+            <!-- <Column header="Agent" sortable filterField="representative" sortField="representative.name" :showFilterMatchModes="false" :filterMenuStyle="{'width':'14rem'}" style="min-width: 14rem">
                 <template #body="{data}">
                     <img src="https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png" width="30" style="vertical-align: middle" />
                     <span class="image-text">{{data.representative.name}}</span>
@@ -55,8 +84,8 @@
                         </template>
                     </MultiSelect>
                 </template>
-            </Column>
-            <Column field="date" header="Date" sortable dataType="date" style="min-width: 8rem">
+            </Column> -->
+            <!-- <Column field="date" header="Date" sortable dataType="date" style="min-width: 8rem">
                 <template #body="{data}">
                     {{formatDate(data.date)}}
                 </template>
@@ -87,7 +116,9 @@
                     </Dropdown>
                 </template>
             </Column>
-            <Column field="activity" header="Activity" sortable :showFilterMatchModes="false" style="min-width: 10rem">
+           
+-->
+            <!-- <Column field="activity" header="Activity" sortable :showFilterMatchModes="false" style="min-width: 10rem">
                 <template #body="{data}">
                     <ProgressBar :value="data.activity" :showValue="false" />
                 </template>
@@ -98,62 +129,69 @@
                         <span>{{filterModel.value ? filterModel.value[1] : 100}}</span>
                     </div>
                 </template>
-            </Column>
-            <Column headerStyle="width: 4rem; text-align: center" bodyStyle="text-align: center; overflow: visible">
-                <template #body>
-                    <Button type="button" icon="pi pi-cog"></Button>
-                </template>
-            </Column>
+            </Column> -->
+           
         </DataTable>
 	</div>
 </template>
 
-<script>
-import { ref, onMounted } from "vue";
-import CustomerService from "@/services/CustomerService";
+<script setup>
+// import { ref, onMounted } from "vue";
+// import CustomerService from "@/services/CustomerService";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
+         const customers = ref();
 
-export default {
-    setup() {
-        onMounted(() => {
-            customerService.value.getCustomersLarge().then((data) => {
-                customers.value = data;
-                customers.value.forEach(
-                    (customer) => (customer.date = new Date(customer.date))
-                );
-                loading.value = false;
-            });
-        });
-        const customers = ref();
+         const loading = ref(true);
+
+        const {data} = await useAsyncGql({
+            operation : "getUser"
+        })
+      
+            // const data =users
+            console.log(data.value.consultantRequestsBoard.data.items)
+            customers.value = data.value.consultantRequestsBoard.data.items;
+            console.log("cust" , customers.value)
+            customers.value.forEach(
+                (customer) => (customer.date = new Date(customer.date))
+            );
+            loading.value = false;
+    
+        
+        
+     
         const selectedCustomers = ref();
         const filters = ref({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            name: {
+            "user.enFullName": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
             },
-            "country.name": {
+            "user.email": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
             },
-            representative: { value: null, matchMode: FilterMatchMode.IN },
-            date: {
-                operator: FilterOperator.AND,
-                constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-            },
-            balance: {
+            
+            // representative: { value: null, matchMode: FilterMatchMode.IN },
+            // date: {
+            //     operator: FilterOperator.AND,
+            //     constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+            // },
+           "user.age": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
             },
-            status: {
-                operator: FilterOperator.OR,
-                constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+            "user.phone": {
+                operator: FilterOperator.AND,
+                constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
             },
+            // status: {
+            //     operator: FilterOperator.OR,
+            //     constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+            // },
             activity: { value: null, matchMode: FilterMatchMode.BETWEEN },
             verified: { value: null, matchMode: FilterMatchMode.EQUALS },
         });
-        const customerService = ref(new CustomerService());
-        const loading = ref(true);
+        // const customerService = ref(new CustomerService());
         const representatives = [
             { name: "Amy Elsner", image: "amyelsner.png" },
             { name: "Anna Fali", image: "annafali.png" },
@@ -187,18 +225,8 @@ export default {
                 currency: "USD",
             });
         };
-        return {
-            customers,
-            filters,
-            loading,
-            representatives,
-            formatCurrency,
-            selectedCustomers,
-            formatDate,
-            statuses,
-        };
-    }
-};
+
+
 </script>
 
 <style lang="scss" scoped>
