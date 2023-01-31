@@ -1,0 +1,36 @@
+query questions {
+  faqCategories {
+    data {
+      id
+      arTitle
+      faq {
+        id
+        arQuestion
+        arAnswer
+      }
+    }
+  }
+}
+
+mutation createfaq(
+  $arq: String!
+  $ara: String!
+  $enq: String!
+  $ena: String!
+  $cid: String!
+) {
+  createFaqBoard(
+    input: {
+      arQuestion: $arq
+      arAnswer: $ara
+      enQuestion: $enq
+      enAnswer: $ena
+      categoryId: $cid
+    }
+  ) {
+    data {
+      arQuestion
+      arAnswer
+    }
+  }
+}

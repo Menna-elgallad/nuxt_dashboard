@@ -1,6 +1,6 @@
 <template >
 <div style="width:100vw" >
-  
+  <loadingbar :duration="1000" />
   <!-- <chart type="bar" :data="basicData"/> -->
   
 

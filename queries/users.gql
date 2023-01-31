@@ -1,5 +1,5 @@
 query getUser {
-  consultantRequestsBoard {
+  consultantRequestsBoard(filter: { consultantApprovalStatus: PENDING }) {
     data {
       items {
         user {
@@ -12,7 +12,33 @@ query getUser {
           profilePicture
           phone
           role
+          id
         }
+        requestType
+        id
+        approvalRequest {
+          status
+          rejectReason
+        }
+      }
+    }
+  }
+}
+
+query Doctors {
+  consultantsBoard {
+    data {
+      items {
+        age
+        email
+        enFirstName
+        enFullName
+        enLastName
+        gender
+        profilePicture
+        phone
+        role
+        id
       }
     }
   }

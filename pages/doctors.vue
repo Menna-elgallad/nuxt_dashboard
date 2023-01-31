@@ -1,7 +1,7 @@
 
 <template>
-    <div >
-        <DataTable v-if="customers" :value="customers" :paginator="true" class="p-datatable-customers" :rows="5" 
+    <div v-if="customers">
+        <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="5" 
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" v-model:filters="filters" filterDisplay="menu" :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -22,26 +22,26 @@
                 Loading customers data. Please wait.
             </template>
             <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column field="user.enFullName" header="Name" sortable style="min-width: 14rem">
+            <Column field="enFullName" header="Name" sortable style="min-width: 14rem">
                 <template #body="{data}">
-                    <img :src =" 'https://staging-api.tatmeen.sa/' +data.user.profilePicture" width="30" style="vertical-align: middle" />
+                    <img :src =" 'https://staging-api.tatmeen.sa/' +data.profilePicture" width="30" style="vertical-align: middle" />
                  
-                    {{data.user.enFullName}}
+                    {{data.enFullName}}
                 </template>
                 <!-- <template #filter="{filterModel}">
                     <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>
                 </template> -->
             </Column>
-            <Column field="user.email" header="Email" sortable filterMatchMode="contains" style="min-width: 14rem">
+            <Column field="email" header="Email" sortable filterMatchMode="contains" style="min-width: 14rem">
                 <template #body="{data}">
                     
-                    <span class="image-text">{{data.user.email}}</span>
+                    <span class="image-text">{{data.email}}</span>
                 </template>
                 <!-- <template #filter="{filterModel}">
                     <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by country"/>
                 </template> -->
             </Column>
-            <!-- <Column field="user.age" header="Age" sortable style="min-width: 14rem">
+            <!-- <Column field="age" header="Age" sortable style="min-width: 14rem">
                 <template #body="{data}">
                     {{data.user.age}}
                 </template>
@@ -49,30 +49,20 @@
                     <InputText type="text" v-model="filterModel.value" class="p-column-filter" placeholder="Search by name"/>
                 </template>
             </Column> -->
-            <Column field="user.phone" header="Phone" sortable style="min-width: 14rem">
+            <Column field="phone" header="Phone" sortable style="min-width: 14rem">
                 <template #body="{data}">
-                    {{data.user.phone}}
+                    {{data.phone}}
                 </template>
          
             </Column>
-            <Column field="user.genders" header="Gender" style="min-width: 14rem">
+            <Column field="genders" header="Gender" style="min-width: 14rem">
                 <template #body="{data}">
-                    {{data.user.gender}}
+                    {{data.gender}}
                 </template>
                 
             </Column>
             <Column  style="min-width: 14rem">
-                <template #body="{data}">
-                    <Button type="button" class="mybutton mr-2" @click="accept(data.id)">Accept</Button>
-                    <Button label="Regect"  class="mybutton2 mr-2" @click="openBasic" />
-                <Dialog header="Reason for regection" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '50vw'}">
-                    <InputText class="w-100" v-model="regectReason"/>
-                    <template #footer>
-                        <Button label="No" icon="pi pi-times" @click="closeBasic()" class="p-button-text"/>
-                        <Button label="Yes" icon="pi pi-check" @click="closeBasic() ; Regect(data.id)" autofocus />
-                    </template>
-                </Dialog>
-                </template>
+               
             </Column> 
             <!-- <Column header="Agent" sortable filterField="representative" sortField="representative.name" :showFilterMatchModes="false" :filterMenuStyle="{'width':'14rem'}" style="min-width: 14rem">
                 <template #body="{data}">
@@ -154,13 +144,13 @@ const regectReason = ref("")
 async function getdocreq(){
 
     const {data:users} = await useAsyncGql({
-            operation : "getUser"
+            operation : "Doctors"
         })
       
             // const data =users
-            const data = users.value.consultantRequestsBoard.data.items
-            const selected = data.filter(e => e.requestType === "JOIN_REQUEST")
-            customers.value = selected;
+            const data = users.value.consultantsBoard.data.items
+          
+            customers.value = data;
             console.log("cust" , customers.value)
             customers.value.forEach(
                 (customer) => (customer.date = new Date(customer.date))
@@ -173,21 +163,21 @@ getdocreq() ;
         const selectedCustomers = ref();
         const filters = ref({
             global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-            "user.enFullName": {
+            "enFullName": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
             },
-            "user.email": {
+            "email": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
             },
             
  
-           "user.age": {
+           "age": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
             },
-            "user.phone": {
+            "phone": {
                 operator: FilterOperator.AND,
                 constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
             },
@@ -195,29 +185,7 @@ getdocreq() ;
             verified: { value: null, matchMode: FilterMatchMode.EQUALS },
         });
 
-        async function accept (id){
-            const {data:message } = await useAsyncGql({
-            operation: "accept" , 
-            variables : {"id" : id , "status" : "APPROVED"}
-        }) ; 
-            console.log(message.value)
-            getdocreq();
-        } ;
-        const displayBasic = ref(false); 
-        const openBasic = () => {
-            displayBasic.value = true;
-        };
-        const closeBasic = () => {
-            displayBasic.value = false;
-        };
-        async function Regect (id){
-            const {data:message2 } = await useAsyncGql({
-            operation: "Regect" , 
-            variables : {"id" : id , "status" : "REJECTED" ,"reason" : regectReason.value }
-        })
-        console.log(message2.value)
-        getdocreq();
-    }
+     
         
 
 

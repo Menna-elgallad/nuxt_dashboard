@@ -2,6 +2,8 @@
 
 
 <div id="allTheNav">
+  
+
     <nav id="navigator" class="navbar" :class="{navbaropen: opened}">
       <span class="open-slide">
         <a href="#" @click="opened = !opened">
@@ -22,8 +24,10 @@
       </ul>
     </nav>
   <div id="side-menu" class="side-nav" :class="{sidenavopen: opened}">
-       <nuxt-link href="/"><i class="pi pi-home mr-2"></i> Dashboard</nuxt-link>
-      <nuxt-link href="/users"><i class="pi pi-user mr-2 "></i> Users</nuxt-link>
+    <PanelMenu :model="items" v-model:expandedKeys="expandedKeys">
+   
+  </PanelMenu>
+    
   </div>
   <div id="main" :class="{mainopen: opened}">
     <slot/>
@@ -36,6 +40,52 @@
   <script setup>
   
   const opened = ref(true) ; 
+  const expandedKeys = ref({});
+const items = ref([
+            {
+                key: '0',
+                label: 'Dashboard',
+                icon: 'pi pi-home',
+                url : '/'  , 
+                
+            },
+          
+            {
+                key: '1',
+                label: 'Users',
+                icon: 'pi pi-fw pi-user',
+                items: [{
+                        key: '1_0',
+                        label: 'join requests',
+                        icon: 'pi pi-fw pi-user-plus',
+                        url : "/users"
+
+                    },
+                    {
+                        key: '1_1',
+                        label: 'Doctors',
+                        icon: 'pi pi-database',
+                        url : "/doctors"
+
+                    },
+ ]
+            },
+            {
+                key: '2',
+                label: 'Faqs',
+                icon: 'pi pi-question-circle',
+                items: [{
+                        key: '2_0',
+                        label: 'Categories',
+                        icon: 'pi pi-comments',
+                        url : "/faqs"
+
+                    },
+ ]
+            },
+  
+        ]);
+
   </script>
   
   <style lang="scss">
@@ -166,6 +216,9 @@
   .botopen{
     transform: translateY(-10px) rotateZ(-45deg);
   }
+  .p-panelmenu {
+    width: 22rem;
+}
   
   </style>
   

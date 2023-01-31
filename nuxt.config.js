@@ -1,4 +1,7 @@
 export default defineNuxtConfig({
+    app: {
+        pageTransition: { name: 'page', mode: 'out-in' }
+    },
     css: [
         "primevue/resources/themes/saga-blue/theme.css",
         "primevue/resources/primevue.css",
@@ -20,6 +23,7 @@ export default defineNuxtConfig({
     modules: ["nuxt-graphql-client",
 
     ],
+
     runtimeConfig: {
         public: {
             GQL_HOST: "https://staging-api.tatmeen.sa/graphql", // overwritten by process.env.GQL_HOST
