@@ -14,10 +14,20 @@ import PanelMenu from 'primevue/panelmenu';
 import Dialog from 'primevue/dialog';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
+import Textarea from 'primevue/textarea';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmationService from 'primevue/confirmationservice';
+
+
+
+
+
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.use(PrimeVue, { ripple: true });
     nuxtApp.vueApp.use(ToastService);
+    nuxtApp.vueApp.use(ConfirmationService)
+
     nuxtApp.vueApp.component("Button", Button);
     nuxtApp.vueApp.component("InputText", InputText);
     nuxtApp.vueApp.component("Toast", Toast);
@@ -32,20 +42,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.component("Dialog", Dialog);
     nuxtApp.vueApp.component("Accordion", Accordion);
     nuxtApp.vueApp.component("AccordionTab", AccordionTab);
-
-    const app = useNuxtApp();
-
-    app.hook('page:start', () => {
-        console.log('Page start...');
-    });
-    app.hook('page:finish', () => {
-        console.log('Page finished!');
-    });
-
-
-
-
-
+    nuxtApp.vueApp.component("Textarea", Textarea);
+    nuxtApp.vueApp.component("ConfirmPopup", ConfirmPopup);
+    nuxtApp.vueApp.component("ConfirmationService", ConfirmationService);
 
 
     //other components that you need

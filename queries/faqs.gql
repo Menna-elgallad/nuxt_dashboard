@@ -7,6 +7,8 @@ query questions {
         id
         arQuestion
         arAnswer
+        enAnswer
+        enQuestion
       }
     }
   }
@@ -32,5 +34,38 @@ mutation createfaq(
       arQuestion
       arAnswer
     }
+  }
+}
+
+mutation updatefaq(
+  $arq: String!
+  $ara: String!
+  $enq: String!
+  $ena: String!
+  $cid: String!
+  $faqid: ID!
+) {
+  updateFaqBoard(
+    input: {
+      arQuestion: $arq
+      arAnswer: $ara
+      enQuestion: $enq
+      enAnswer: $ena
+      categoryId: $cid
+      faqId: $faqid
+    }
+  ) {
+    data {
+      id
+      arQuestion
+      arAnswer
+    }
+    success
+  }
+}
+
+mutation deletefaq($faqid: String!) {
+  deleteFaqBoard(input: { faqId: $faqid }) {
+    success
   }
 }

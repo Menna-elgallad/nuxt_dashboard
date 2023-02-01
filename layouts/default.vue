@@ -2,7 +2,7 @@
 
 
 <div id="allTheNav">
-  
+  <NuxtLoadingIndicator /> <!-- here -->
 
     <nav id="navigator" class="navbar" :class="{navbaropen: opened}">
       <span class="open-slide">

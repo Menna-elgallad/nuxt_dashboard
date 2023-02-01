@@ -9,6 +9,7 @@
 </template>
   
 <script setup lang="ts">
+
 const route = useRouter()
  onMounted(async function check(){
 
