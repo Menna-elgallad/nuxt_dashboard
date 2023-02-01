@@ -1,0 +1,23 @@
+query questions {
+  faqCategories {
+    data {
+      id
+      arTitle
+      faq {
+        id
+        arQuestion
+        arAnswer
+        enAnswer
+        enQuestion
+      }
+    }
+  }
+}
+
+mutation creatcategory($entitle: String!, $artitile: String!) {
+  createFaqCategoryBoard(
+    input: { enTitle: $entitle, arTitle: $artitile, isActive: true }
+  ) {
+    success
+  }
+}

@@ -1,18 +1,3 @@
-query questions {
-  faqCategories {
-    data {
-      id
-      arTitle
-      faq {
-        id
-        arQuestion
-        arAnswer
-        enAnswer
-        enQuestion
-      }
-    }
-  }
-}
 
 mutation createfaq(
   $arq: String!

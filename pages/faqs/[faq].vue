@@ -206,7 +206,7 @@ async  function Deletefaq(fid){
 
 
 const confirm = useConfirm();
-        const toast = useToast();
+const toast = useToast();
 
         const confirm1 = (event , id) => {
             confirm.require({
