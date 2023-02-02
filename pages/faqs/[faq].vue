@@ -1,8 +1,9 @@
 <template>
     <div class="container">
       
-     
-        <div class="add">
+        <info title="Questions" subtitle="Frequently asked questions"/>
+     <div class="body">
+        <div class="add ">
             <Button type="button" class="mybutton mr-2" @click="openBasic()">Add new Question </Button>
             
             <Dialog header="Question and answer field" v-model:visible="displayBasic" :breakpoints="{'960px': '75vw', '640px': '90vw'}" :style="{width: '50vw'}">
@@ -95,6 +96,7 @@
 
       
     </div>
+</div>
     </div>
   </template>
   
@@ -115,7 +117,7 @@ async function getdata(){
     operation : "questions"
 
 }); 
- categories.value= data.value.faqCategories.data ; 
+ categories.value= data.value.faqCategoriesBoard.data.items ; 
 console.log(categories)
  faqs.value= categories.value?.filter(e=>e.id === id )
 console.log(faqs)

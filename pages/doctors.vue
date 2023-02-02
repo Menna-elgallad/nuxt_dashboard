@@ -1,5 +1,7 @@
 <template>
-    <div v-if="customers">
+    <div class="container">
+        <info title="Users" subtitle="Doctors data"/>
+    <div v-if="customers" class="body">
         <DataTable :value="customers" :paginator="true" class="p-datatable-customers" :rows="5" 
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" v-model:filters="filters" filterDisplay="menu" :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
@@ -57,6 +59,8 @@
            
         </DataTable>
 	</div>
+</div>
+
 </template>
 
 <script setup>

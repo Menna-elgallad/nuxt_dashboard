@@ -1,6 +1,8 @@
 <template>
-    <div >
-        <DataTable v-if="customers" :value="customers" :paginator="true" class="p-datatable-customers" :rows="5" 
+    <div class="container">
+        <info title="Users" subtitle="Join Requests"/>
+        <div class="body" v-if="customers">
+        <DataTable  :value="customers" :paginator="true" class="p-datatable-customers" :rows="5" 
             dataKey="id" :rowHover="true" v-model:selection="selectedCustomers" v-model:filters="filters" filterDisplay="menu" :loading="loading"
             paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[10,25,50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
@@ -15,7 +17,7 @@
                 </div>
             </template>
             <template #empty>
-                No customers found.
+                No Requests found.
             </template>
             <template #loading>
                 Loading customers data. Please wait.
@@ -66,6 +68,7 @@
            
         </DataTable>
 	</div>
+</div>
 </template>
 
 <script setup>
